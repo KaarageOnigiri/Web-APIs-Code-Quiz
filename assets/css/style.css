@@ -19,11 +19,12 @@ button {
     border-radius: 7px;
     background-color: rgb(17, 156, 202);
     color: white;
-    margin-top: 25px;
 }
 
 button:hover {
     cursor: pointer;
+    background-color: rgb(211, 159, 167);
+    color: white;
 }
 
 p {
