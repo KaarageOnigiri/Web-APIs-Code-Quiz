@@ -1,0 +1,41 @@
+
+header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0 20%;
+    margin-top: 100px;
+}
+
+button {
+    padding: 12px;
+    border-radius: 7px;
+    background-color: rgb(17, 156, 202);
+    color: white;
+    margin-top: 25px;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+p {
+    text-align: center;
+}
+
+#viewHighScores {
+    color: rgb(194, 134, 144);
+}
+
+#viewHighScores:hover {
+    color: rgb(0, 168, 168);
+    cursor: pointer;
+}
+
