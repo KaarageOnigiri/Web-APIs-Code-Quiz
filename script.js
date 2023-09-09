@@ -5,6 +5,7 @@ var buttons = document.getElementById("buttons");
 var lists = document.getElementById("lists");
 var startQuizButton = document.getElementById("startQuiz");
 // use class, change it when click so it doesn't click both at once (because id).
+var container = document.querySelector(".container")
 var changeToViewHighScores = document.querySelector(".viewHighScores");
 var changeToViewDefaultPage = document.querySelector(".viewDefaultPage");
 
@@ -53,9 +54,10 @@ function viewTop10(event) {
     startQuizButton.textContent = "";
     buttons.setAttribute("style", "display:none");
     lists.setAttribute("style", "text-align:left");
-    // this
-    viewHighScores.setAttribute("class", ".viewDefaultPage");
-    console.log(changeToViewHighScores);
+    // this is a problem 
+    viewHighScores.setAttribute("class", "viewDefaultPage");
+    // this is null 
+    console.log(changeToViewDefaultPage);
 
     var topOfList = [""];
     console.log();
@@ -66,10 +68,19 @@ function viewTop10(event) {
         topOfList[x].textContent = previousQuizParticipants[x] + ": " + previousQuizScores[x];
         lists.appendChild(topOfList[x]);
     }
+
+    // if (mode === "dark") {
+    //     mode = "light";
+    //     container.setAttribute("class", "light");
+    //   }
+    
     
     // just to keep track
     mainPage = false;
-    // viewHighScores.addEventListener("click", defaultPage);
+    // this one doesn't work:
+    // changeToViewDefaultPage.addEventListener("click", defaultPage);
+    // so I use this one
+    viewHighScores.addEventListener("click", defaultPage);
 };
 
 function defaultPage(event) {
@@ -82,8 +93,8 @@ function defaultPage(event) {
     startQuizButton.textContent = "Start Quiz";
     buttons.setAttribute("style", "display:column");
     lists.setAttribute("style", "text-align:center");
-    // this
-    viewHighScores.setAttribute("class", ".viewHighScores");
+    // this is a problem
+    viewHighScores.setAttribute("class", "viewHighScores");
 
     // just to keep track
     mainPage = true;
@@ -91,15 +102,57 @@ function defaultPage(event) {
 
 function startQuiz() {
     console.log("start quiz");
+    questions.textContent = "";
+    lists.setAttribute("style", "display:none");
+    startQuizButton.setAttribute("style", "display:none");
+    viewHighScores.setAttribute("style", "visibility:hidden");
+    buttons.setAttribute("style", "text-align:left");
+
+    countdown();
+    question1();
 };
 
+function countdown() {
+    timeLeft = 60;
+  
+    var timeInterval = setInterval(function () { 
+      timer.innerHTML = timeLeft; 
+      //test
+      console.log(timeLeft);
+      if(timeLeft === 0) {    
+        clearInterval(timeInterval);
+        timer.innerHTML = "60";
+        // this function below is to make the user fill in their information (initials)
+        // function here
+      }
+      // moved this to the bottom so it doesn't stop at 1 seconds.
+      timeLeft--;
+    }, 1000);
+  }
+
+function question1() {
+    console.log("Question 1");
+
+    questions.textContent = "Which of the following is the Boolean values?";
+
+    var options = [""];
+    var fourQuestions = ["1. 0, 1", "2. true, false", "3. 1, 2", "4. string, number"];
+    for (x=0; x<fourQuestions.length; x++) {
+        // create elements 
+        options[x] = document.createElement("button");
+        options[x].textContent = fourQuestions[x];
+        buttons.appendChild(options[x]);
+    }
+}
 
 
 
 
 
 
-changeToViewHighScores.addEventListener("click", viewTop10);
+
+viewHighScores.addEventListener("click", viewTop10);
+// this is an error for some reason.
 // changeToViewDefaultPage.addEventListener("click", defaultPage);
 
 startQuizButton.addEventListener("click", startQuiz);
