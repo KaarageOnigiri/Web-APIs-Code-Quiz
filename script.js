@@ -128,11 +128,16 @@ function countdown() {
       // moved this to the bottom so it doesn't stop at 1 seconds.
       timeLeft--;
     }, 1000);
-  }
+}
+
+// -5 secs function
+function minus5() {
+    timeLeft = timeLeft - 5;
+}
 
 function question1() {
     console.log("Question 1");
-
+    
     questions.textContent = "Which of the following is the Boolean values?";
 
     var options = [""];
@@ -143,8 +148,19 @@ function question1() {
         options[x].textContent = fourQuestions[x];
         buttons.appendChild(options[x]);
     }
+    console.log(options);
+
+    options[0].addEventListener("click", minus5);
+    options[1].addEventListener("click", question2);
+    options[2].addEventListener("click", minus5);
+    options[3].addEventListener("click", minus5);
 }
 
+function question2() {
+    console.log("Question 2");
+
+    questions.textContent = [""]
+}
 
 
 
