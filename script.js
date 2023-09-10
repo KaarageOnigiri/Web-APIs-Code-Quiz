@@ -28,8 +28,8 @@ function init () {
     timeLeft = 60;
     timer.textContent = timeLeft;
     if (previousQuizScores === null || previousQuizParticipants === null) {
-        previousQuizParticipants = ["EXAMPLE"];
-        previousQuizScores = ["30"];
+        previousQuizParticipants = ["Example1", "Example2", "Example3", "Example4", "Example5", "Example6", "Example7", "Example8", "Example9", "Example10"];
+        previousQuizScores = ["50", "45", "40", "35", "30", "25", "20", "15", "10", "5"];
         // test
         console.log(previousQuizParticipants[0], previousQuizScores[0]);
         console.log(previousQuizParticipants.length, previousQuizScores.length);
@@ -40,6 +40,7 @@ function init () {
 function viewTop10() {
     // test
     console.log("viewTop10");
+    viewHighScores.setAttribute("style", "visibility:visible");
     // changes(1)
     //button for back to homepage (only visual)
     // new page change (3 lines changed, 10 (possibly) added)
@@ -56,7 +57,7 @@ function viewTop10() {
     for (x=0; x<previousQuizParticipants.length; x++) {
         // create elements 
         topOfList[x] = document.createElement("li");
-        topOfList[x].textContent = previousQuizParticipants[x] + ": " + previousQuizScores[x];
+        topOfList[x].textContent = previousQuizParticipants[x] + " : " + previousQuizScores[x];
         lists.appendChild(topOfList[x]);
     }
     
@@ -93,10 +94,12 @@ function startQuiz() {
     question1();
 }
 
+var timeInterval;
+
 function countdown() {
     timeLeft = 60;
   
-    var timeInterval = setInterval(function () { 
+    timeInterval = setInterval(function () { 
       timer.innerHTML = timeLeft; 
       //test
       console.log(timeLeft);
@@ -108,7 +111,7 @@ function countdown() {
       }
       // moved this to the bottom so it doesn't stop at 1 seconds.
       timeLeft--;
-    }, 100);
+    }, 1000);
 }
 
 function gameOverScreen() {
@@ -257,8 +260,8 @@ function quizCompleted() {
     options[1].removeEventListener("click", minus5);
     options[2].removeEventListener("click", minus5);
     options[3].removeEventListener("click", minus5);
-
-    viewHighScores.setAttribute("style", "visibility:visible");
+    // only show it after user fill in inputs or restart 
+    // viewHighScores.setAttribute("style", "visibility:visible");
     console.log(buttons.children);
     // remove last 4 child nodes
     buttons.children[4].remove();
@@ -268,17 +271,39 @@ function quizCompleted() {
     // quizStartButton shows up again
     startQuizButton.setAttribute("style", "display:column");
     // time stop   
+    clearInterval(timeInterval);
     
-    
-    
-    
-
-    viewTop10();
+    userInfo();
 }
 
+function userInfo() {
+    // if user didn't make top 10, present this message to them
+    
+    // before adjusting ranking, get user to fill in initial.
+    // before localStorage, adjust the array according to ranking, with for loop.
+    // add localStorage function after
+    // localStorage.setItem("", JSON.stringify());
+    questions.setAttribute("style", "text-align:center")
+    questions.textContent = "Please fill in your name below and click submit to view your ranking!";
+    lists.setAttribute("style", "display:column");
+    lists.textContent = "";
+    startQuizButton.textContent = "";
+    buttons.setAttribute("style", "display:none");
+    
+    var userInput = document.createElement("input");
+    userInput.setAttribute("style", "border:1px solid darkgrey; padding: 5px; display:flex; flex-direction:column; margin-bottom:15px");
+    lists.appendChild(userInput);
 
-
-
+    var userSubmit = document.createElement("button");
+    userSubmit.setAttribute("id", "submitHighScore");
+    userSubmit.textContent = "Submit";
+    lists.appendChild(userSubmit);
+    submitHighScore = document.getElementById("submitHighScore");
+    // add high score to the fold
+    
+    // make this below a click eventlistener
+    // viewTop10();
+}
 
 
 
