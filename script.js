@@ -4,20 +4,15 @@ var questions = document.getElementById("bigLetters");
 var buttons = document.getElementById("buttons");
 var lists = document.getElementById("lists");
 var startQuizButton = document.getElementById("startQuiz");
-// use class, change it when click so it doesn't click both at once (because id).
-var container = document.querySelector(".container")
-var changeToViewHighScores = document.querySelector(".viewHighScores");
-var changeToViewDefaultPage = document.querySelector(".viewDefaultPage");
-
-// test
-console.log();
+var wordTime = document.getElementById("wordTime");
 
 // -1. Set up CSS and HTML.
 // -2. create an init function for bringing out localStorage high scores (lists).
-// 3. when clicking on the 'start quiz' button, timer starts counting, h1 changes to questions, p's margin completely gone, 'ul' creates 3 more button.
-// 4. when correctly answering a question, advance to the next question.
-// 5. after answering all questions, result page shows up and show previous high scores (previous ten), then store the name and score in the localStorage if they are top 10.
-// 6. when clicked on top left, you can switch between quiz start and viewHighScores indefinitely (except during quiz)
+// -3. when clicking on the 'start quiz' button, timer starts counting, h1 changes to questions, p's margin completely gone, 'ul' creates 3 more button.
+// -4. when correctly answering a question, advance to the next question.
+// 5. after answering all questions, result page shows up and show previous high scores (previous ten), then store the name and score in the localStorage if they are top 10, also stop timer.
+// -6. when clicked on top left, you can switch between quiz start and viewHighScores indefinitely (except during quiz)
+// -7. add game over screen
 
 // might use it
 var mainPage = true;
@@ -38,11 +33,11 @@ function init () {
         // test
         console.log(previousQuizParticipants[0], previousQuizScores[0]);
         console.log(previousQuizParticipants.length, previousQuizScores.length);
+        viewHighScores.addEventListener("click", viewTop10);
     }
-};
+}
 
-function viewTop10(event) {
-    event.stopPropagation();
+function viewTop10() {
     // test
     console.log("viewTop10");
     // changes(1)
@@ -54,10 +49,6 @@ function viewTop10(event) {
     startQuizButton.textContent = "";
     buttons.setAttribute("style", "display:none");
     lists.setAttribute("style", "text-align:left");
-    // this is a problem 
-    viewHighScores.setAttribute("class", "viewDefaultPage");
-    // this is null 
-    console.log(changeToViewDefaultPage);
 
     var topOfList = [""];
     console.log();
@@ -68,23 +59,13 @@ function viewTop10(event) {
         topOfList[x].textContent = previousQuizParticipants[x] + ": " + previousQuizScores[x];
         lists.appendChild(topOfList[x]);
     }
-
-    // if (mode === "dark") {
-    //     mode = "light";
-    //     container.setAttribute("class", "light");
-    //   }
     
-    
-    // just to keep track
     mainPage = false;
-    // this one doesn't work:
-    // changeToViewDefaultPage.addEventListener("click", defaultPage);
-    // so I use this one
+    viewHighScores.removeEventListener("click", viewTop10);
     viewHighScores.addEventListener("click", defaultPage);
-};
+}
 
-function defaultPage(event) {
-    event.stopPropagation();
+function defaultPage() {
     console.log("defaultPage");
     // changes(1) back
     viewHighScores.textContent = "View high scores";
@@ -93,12 +74,12 @@ function defaultPage(event) {
     startQuizButton.textContent = "Start Quiz";
     buttons.setAttribute("style", "display:column");
     lists.setAttribute("style", "text-align:center");
-    // this is a problem
-    viewHighScores.setAttribute("class", "viewHighScores");
 
     // just to keep track
     mainPage = true;
-};
+    viewHighScores.removeEventListener("click", defaultPage);
+    viewHighScores.addEventListener("click", viewTop10);
+}
 
 function startQuiz() {
     console.log("start quiz");
@@ -110,7 +91,7 @@ function startQuiz() {
 
     countdown();
     question1();
-};
+}
 
 function countdown() {
     timeLeft = 60;
@@ -122,12 +103,26 @@ function countdown() {
       if(timeLeft === 0) {    
         clearInterval(timeInterval);
         timer.innerHTML = "60";
-        // this function below is to make the user fill in their information (initials)
-        // function here
+        
+        gameOverScreen();
       }
       // moved this to the bottom so it doesn't stop at 1 seconds.
       timeLeft--;
-    }, 1000);
+    }, 100);
+}
+
+function gameOverScreen() {
+    console.log("gameOverScreen")
+    buttons.children[4].remove();
+    buttons.children[3].remove();
+    buttons.children[2].remove();
+    buttons.children[1].remove();
+
+    questions.textContent = "Game Over!"
+    lists.setAttribute("style", "display:column");
+    lists.textContent = "Refresh the page to try again.";
+    timer.textContent = "";
+    wordTime.textContent = "";
 }
 
 // -5 secs function
@@ -148,6 +143,7 @@ function question1() {
         options[x].textContent = fourQuestions[x];
         buttons.appendChild(options[x]);
     }
+    // test
     console.log(options);
 
     options[0].addEventListener("click", minus5);
@@ -158,8 +154,126 @@ function question1() {
 
 function question2() {
     console.log("Question 2");
+    console.log(buttons.children[0 + 1]);
 
-    questions.textContent = [""]
+    questions.textContent = "What is hoisting, in Javascript?";
+
+    var options = [""];
+    var fourQuestions = ["1. An act of moving codes around", "2. A practice for programmers to stand up and stretch every few hours", "3. When the codes are too huge, and the machine has trouble running it", "4. A process in which the Javacript interpreter move the declaration of functions, variables, classes, and etc. to the top of the page"];
+    for (x=0; x<fourQuestions.length; x++) {
+        // children + 1 because the first button is hidden (startQuizButton).
+        options[x] = buttons.children[x + 1];
+        options[x].textContent = fourQuestions[x]; 
+    }
+
+    options[0].removeEventListener("click", minus5);
+    options[1].removeEventListener("click", question2);
+    options[2].removeEventListener("click", minus5);
+    options[3].removeEventListener("click", minus5);
+    // these 4 lines above is 
+    options[0].addEventListener("click", minus5);
+    options[1].addEventListener("click", minus5);
+    options[2].addEventListener("click", minus5);
+    options[3].addEventListener("click", question3);
+}
+
+function question3() {
+    console.log("Question 3");
+
+    questions.textContent = "Inside which HTML element do we place the Javascript?";
+
+    var options = [""];
+    var fourQuestions = ["1. script", "2. js", "3. javascript", "4. script.js"];
+    for (x=0; x<fourQuestions.length; x++) {
+        options[x] = buttons.children[x + 1];
+        options[x].textContent = fourQuestions[x];
+    }
+
+    options[0].removeEventListener("click", minus5);
+    options[1].removeEventListener("click", minus5);
+    options[2].removeEventListener("click", minus5);
+    options[3].removeEventListener("click", question3);
+
+    options[0].addEventListener("click", minus5);
+    options[1].addEventListener("click", minus5);
+    options[2].addEventListener("click", question4);
+    options[3].addEventListener("click", minus5);
+}
+
+function question4() {
+    console.log("Question 4");
+
+    questions.textContent = "Where is the best place to insert a JavaScript in the HTML?";
+
+    var options = [""];
+    var fourQuestions = ["1. The beginning of <head> section", "2. The beginning of <body> section", "3. The end of <body> section", "4. The end of <head> section"];
+    for (x=0; x<fourQuestions.length; x++) {
+        options[x] = buttons.children[x + 1];
+        options[x].textContent = fourQuestions[x];
+    }
+
+    options[0].removeEventListener("click", minus5);
+    options[1].removeEventListener("click", minus5);
+    options[2].removeEventListener("click", question4);
+    options[3].removeEventListener("click", minus5);
+
+    options[0].addEventListener("click", minus5);
+    options[1].addEventListener("click", minus5);
+    options[2].addEventListener("click", question5);
+    options[3].addEventListener("click", minus5);
+}
+
+function question5() {
+    console.log("Question 5");
+
+    questions.textContent = "How do you create an element with Javascript in the HTML?";
+
+    var options = [""];
+    var fourQuestions = ["1. document.createElement()", "2. document.setElement()", "3. document.makeElement()", "4. document.element()"];
+    for (x=0; x<fourQuestions.length; x++) {
+        options[x] = buttons.children[x + 1];
+        options[x].textContent = fourQuestions[x];
+    }
+
+    options[0].removeEventListener("click", minus5);
+    options[1].removeEventListener("click", minus5);
+    options[2].removeEventListener("click", question5);
+    options[3].removeEventListener("click", minus5);
+
+    options[0].addEventListener("click", quizCompleted);
+    options[1].addEventListener("click", minus5);
+    options[2].addEventListener("click", minus5);
+    options[3].addEventListener("click", minus5);
+}
+
+function quizCompleted() {
+    var options = [""];
+    var fourQuestions = ["", "", "", ""]
+    for (x=0; x<fourQuestions.length; x++) {
+        options[x] = buttons.children[x + 1];
+    }
+
+    options[0].removeEventListener("click", quizCompleted);
+    options[1].removeEventListener("click", minus5);
+    options[2].removeEventListener("click", minus5);
+    options[3].removeEventListener("click", minus5);
+
+    viewHighScores.setAttribute("style", "visibility:visible");
+    console.log(buttons.children);
+    // remove last 4 child nodes
+    buttons.children[4].remove();
+    buttons.children[3].remove();
+    buttons.children[2].remove();
+    buttons.children[1].remove();
+    // quizStartButton shows up again
+    startQuizButton.setAttribute("style", "display:column");
+    // time stop   
+    
+    
+    
+    
+
+    viewTop10();
 }
 
 
@@ -167,9 +281,6 @@ function question2() {
 
 
 
-viewHighScores.addEventListener("click", viewTop10);
-// this is an error for some reason.
-// changeToViewDefaultPage.addEventListener("click", defaultPage);
 
 startQuizButton.addEventListener("click", startQuiz);
 
