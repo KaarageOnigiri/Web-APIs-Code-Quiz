@@ -5,28 +5,27 @@ var buttons = document.getElementById("buttons");
 var lists = document.getElementById("lists");
 var startQuizButton = document.getElementById("startQuiz");
 var wordTime = document.getElementById("wordTime");
+var rightOrWrong = document.getElementById("rightOrWrong");
 
 // -1. Set up CSS and HTML.
 // -2. create an init function for bringing out localStorage high scores (lists).
 // -3. when clicking on the 'start quiz' button, timer starts counting, h1 changes to questions, p's margin completely gone, 'ul' creates 3 more button.
 // -4. when correctly answering a question, advance to the next question.
-// 5. after answering all questions, result page shows up and show previous high scores (previous ten), then store the name and score in the localStorage if they are top 10, also stop timer.
+// -5. after answering all questions, result page shows up and show previous high scores (previous ten), then store the name and score in the localStorage if they are top 10, also stop timer.
 // -6. when clicked on top left, you can switch between quiz start and viewHighScores indefinitely (except during quiz)
-// -7. add game over screen
+// -7. add game over screen (refresh to restart).
+// 8. add right/wrong indicator when clicking on answer buttons.
 
 // might use it
 var mainPage = true;
 var timeLeft;
 
-var previousQuizScores = localStorage.getItem("previousQuizHighScores");
-var previousQuizParticipants = localStorage.getItem("previousQuizParticipants");
-// previousQuizScores.split("");
-// previousQuizParticipants.split("");
+// just in case
+// var previousQuizScores = localStorage.getItem("previousQuizHighScores");
+// var previousQuizParticipants = localStorage.getItem("previousQuizParticipants");
 
 var previousQuizScores = JSON.parse(localStorage.getItem("previousQuizHighScores"));
 var previousQuizParticipants = JSON.parse(localStorage.getItem("previousQuizParticipants"));
-// previousQuizScores.split("");
-// previousQuizParticipants.split("");
 
 // test
 console.log(previousQuizParticipants, previousQuizScores);
@@ -51,7 +50,6 @@ function viewTop10() {
     console.log("viewTop10");
     viewHighScores.setAttribute("style", "visibility:visible");
     // changes(1)
-    //button for back to homepage (only visual)
     // new page change (3 lines changed, 10 (possibly) added)
     viewHighScores.textContent = "Return";
     questions.textContent = "High Scores";
@@ -62,20 +60,20 @@ function viewTop10() {
 
     var topOfList = [""];
     console.log();
-    // for loop here with .length
+    // for loop here to show top 10 high scores
     for (x=0; x<10; x++) {
         // create elements 
         topOfList[x] = document.createElement("li");
         topOfList[x].textContent = previousQuizParticipants[x] + " : " + previousQuizScores[x];
         lists.appendChild(topOfList[x]);
     }
-    
     mainPage = false;
     viewHighScores.removeEventListener("click", viewTop10);
     viewHighScores.addEventListener("click", defaultPage);
 }
 
 function defaultPage() {
+    // test
     console.log("defaultPage");
     // changes(1) back
     viewHighScores.textContent = "View high scores";
@@ -84,7 +82,6 @@ function defaultPage() {
     startQuizButton.textContent = "Start Quiz";
     buttons.setAttribute("style", "display:column");
     lists.setAttribute("style", "text-align:center");
-
     // just to keep track
     mainPage = true;
     viewHighScores.removeEventListener("click", defaultPage);
@@ -92,8 +89,8 @@ function defaultPage() {
 }
 
 function startQuiz() {
+    // test
     console.log("start quiz");
-    
     questions.textContent = "";
     lists.setAttribute("style", "display:none");
     startQuizButton.setAttribute("style", "display:none");
@@ -108,15 +105,13 @@ var timeInterval;
 
 function countdown() {
     timeLeft = 60;
-  
     timeInterval = setInterval(function () { 
-      timer.innerHTML = timeLeft; 
+      timer.innerHTML = timeLeft;
       //test
       console.log(timeLeft);
       if(timeLeft <= 0) {    
         clearInterval(timeInterval);
         timer.innerHTML = "60";
-        
         gameOverScreen();
       }
       // moved this to the bottom so it doesn't stop at 1 seconds.
@@ -125,6 +120,7 @@ function countdown() {
 }
 
 function gameOverScreen() {
+    // test
     console.log("gameOverScreen")
     buttons.children[4].remove();
     buttons.children[3].remove();
@@ -144,6 +140,7 @@ function minus5() {
 }
 
 function question1() {
+    // test
     console.log("Question 1");
     
     questions.textContent = "Which of the following is the Boolean values?";
@@ -166,6 +163,7 @@ function question1() {
 }
 
 function question2() {
+    // test
     console.log("Question 2");
     console.log(buttons.children[0 + 1]);
 
@@ -191,6 +189,7 @@ function question2() {
 }
 
 function question3() {
+    // test
     console.log("Question 3");
 
     questions.textContent = "Inside which HTML element do we place the Javascript?";
@@ -214,6 +213,7 @@ function question3() {
 }
 
 function question4() {
+    // test
     console.log("Question 4");
 
     questions.textContent = "Where is the best place to insert a JavaScript in the HTML?";
@@ -237,6 +237,7 @@ function question4() {
 }
 
 function question5() {
+    // test
     console.log("Question 5");
 
     questions.textContent = "How do you create an element with Javascript in the HTML?";
@@ -282,13 +283,13 @@ function quizCompleted() {
     startQuizButton.setAttribute("style", "display:column");
     // time stop   
     clearInterval(timeInterval);
-    
     userInfo();
 }
 
 
 
 function userInfo() {
+    // test
     console.log("userInfo")
     console.log(timeLeft, previousQuizScores[9]);
     // previousQuizParticipants = ["Example1", "Example2", "Example3", "Example4", "Example5", "Example6", "Example7", "Example8", "Example9", "Example10"];
@@ -330,14 +331,11 @@ function userInfo() {
         // var userInputValue = userInput.value;
         // console.log(userInput.value);
         userSubmit.addEventListener("click", submitScore);
-
-        // add high score to the viewHighScores.
-        // make this below a click eventlistener
-        // viewTop10();
     }
 }
 
 function submitScore() {
+    // test
     console.log("submitScore");
     
     var userInput = lists.children[0];
