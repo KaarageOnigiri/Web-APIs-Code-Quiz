@@ -17,23 +17,32 @@ var wordTime = document.getElementById("wordTime");
 // might use it
 var mainPage = true;
 var timeLeft;
+
+var previousQuizScores = localStorage.getItem("previousQuizHighScores");
+var previousQuizParticipants = localStorage.getItem("previousQuizParticipants");
+// previousQuizScores.split("");
+// previousQuizParticipants.split("");
+
 var previousQuizScores = JSON.parse(localStorage.getItem("previousQuizHighScores"));
 var previousQuizParticipants = JSON.parse(localStorage.getItem("previousQuizParticipants"));
+// previousQuizScores.split("");
+// previousQuizParticipants.split("");
+
 // test
-console.log(previousQuizScores);
+console.log(previousQuizParticipants, previousQuizScores);
 
 function init () {
     console.log("init");
     console.log("mainPage", mainPage);
     timeLeft = 60;
     timer.textContent = timeLeft;
+    
     if (previousQuizScores === null || previousQuizParticipants === null) {
         previousQuizParticipants = ["Example1", "Example2", "Example3", "Example4", "Example5", "Example6", "Example7", "Example8", "Example9", "Example10"];
         previousQuizScores = ["50", "45", "40", "35", "30", "25", "20", "15", "10", "5"];
         // test
         console.log(previousQuizParticipants[0], previousQuizScores[0]);
         console.log(previousQuizParticipants.length, previousQuizScores.length);
-        viewHighScores.addEventListener("click", viewTop10);
     }
 }
 
@@ -45,7 +54,7 @@ function viewTop10() {
     //button for back to homepage (only visual)
     // new page change (3 lines changed, 10 (possibly) added)
     viewHighScores.textContent = "Return";
-    questions.textContent = "High Score";
+    questions.textContent = "High Scores";
     lists.textContent = "";
     startQuizButton.textContent = "";
     buttons.setAttribute("style", "display:none");
@@ -54,7 +63,7 @@ function viewTop10() {
     var topOfList = [""];
     console.log();
     // for loop here with .length
-    for (x=0; x<previousQuizParticipants.length; x++) {
+    for (x=0; x<10; x++) {
         // create elements 
         topOfList[x] = document.createElement("li");
         topOfList[x].textContent = previousQuizParticipants[x] + " : " + previousQuizScores[x];
@@ -84,6 +93,7 @@ function defaultPage() {
 
 function startQuiz() {
     console.log("start quiz");
+    
     questions.textContent = "";
     lists.setAttribute("style", "display:none");
     startQuizButton.setAttribute("style", "display:none");
@@ -103,7 +113,7 @@ function countdown() {
       timer.innerHTML = timeLeft; 
       //test
       console.log(timeLeft);
-      if(timeLeft === 0) {    
+      if(timeLeft <= 0) {    
         clearInterval(timeInterval);
         timer.innerHTML = "60";
         
@@ -288,7 +298,7 @@ function userInfo() {
     if (timeLeft < previousQuizScores[9]) {
         console.log("tryAgain");
         questions.setAttribute("style", "text-align:center")
-        questions.textContent = "Please refresh the page to try again!";
+        questions.textContent = " 10th place's score was " + previousQuizScores[9] + ", and your score was " + timeLeft + ". Please refresh the page to try again!";
         lists.setAttribute("style", "display:column");
         lists.textContent = "";
         startQuizButton.textContent = "";
@@ -308,6 +318,7 @@ function userInfo() {
         buttons.setAttribute("style", "display:none");
         
         var userInput = document.createElement("input");
+        userInput.setAttribute("label", "submit");
         userInput.setAttribute("style", "border:1px solid darkgrey; padding: 5px; display:flex; flex-direction:column; margin-bottom:15px");
         userInput.placeholder = "Type name here...";
         lists.appendChild(userInput);
@@ -315,7 +326,9 @@ function userInfo() {
         var userSubmit = document.createElement("button");
         userSubmit.textContent = "Submit";
         lists.appendChild(userSubmit);
-        
+
+        // var userInputValue = userInput.value;
+        // console.log(userInput.value);
         userSubmit.addEventListener("click", submitScore);
 
         // add high score to the viewHighScores.
@@ -326,14 +339,31 @@ function userInfo() {
 
 function submitScore() {
     console.log("submitScore");
+    
     var userInput = lists.children[0];
     var userSubmit = lists.children[1];
+    // if user didn't put in name.
+    // if (userInput.value = "") {
+    //     userInput.value = undefined;
+    // }
+    console.log(userInput.value, timeLeft,previousQuizParticipants, previousQuizScores, previousQuizScores.length);
 
-
+    for (x=0; x<10; x++) {
+        if (timeLeft >= previousQuizScores[x]) {
+            previousQuizScores.splice(x, 0, timeLeft);
+            // add new name into previousQuizParticipants.
+            previousQuizParticipants.splice(x, 0, userInput.value);
+            // test
+            console.log(previousQuizParticipants, previousQuizScores);
+            localStorage.setItem("previousQuizParticipants", JSON.stringify(previousQuizParticipants));
+            localStorage.setItem("previousQuizHighScores", JSON.stringify(previousQuizScores));
+            viewTop10();
+        }
+    }
 }
 
 
-
+viewHighScores.addEventListener("click", viewTop10);
 startQuizButton.addEventListener("click", startQuiz);
 
 init();
