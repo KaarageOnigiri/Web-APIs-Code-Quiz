@@ -276,33 +276,60 @@ function quizCompleted() {
     userInfo();
 }
 
+
+
 function userInfo() {
+    console.log("userInfo")
+    console.log(timeLeft, previousQuizScores[9]);
+    // previousQuizParticipants = ["Example1", "Example2", "Example3", "Example4", "Example5", "Example6", "Example7", "Example8", "Example9", "Example10"];
+    // previousQuizScores = ["50", "45", "40", "35", "30", "25", "20", "15", "10", "5"];
     // if user didn't make top 10, present this message to them
     
-    // before adjusting ranking, get user to fill in initial.
-    // before localStorage, adjust the array according to ranking, with for loop.
-    // add localStorage function after
-    // localStorage.setItem("", JSON.stringify());
-    questions.setAttribute("style", "text-align:center")
-    questions.textContent = "Please fill in your name below and click submit to view your ranking!";
-    lists.setAttribute("style", "display:column");
-    lists.textContent = "";
-    startQuizButton.textContent = "";
-    buttons.setAttribute("style", "display:none");
-    
-    var userInput = document.createElement("input");
-    userInput.setAttribute("style", "border:1px solid darkgrey; padding: 5px; display:flex; flex-direction:column; margin-bottom:15px");
-    lists.appendChild(userInput);
+    if (timeLeft < previousQuizScores[9]) {
+        console.log("tryAgain");
+        questions.setAttribute("style", "text-align:center")
+        questions.textContent = "Please refresh the page to try again!";
+        lists.setAttribute("style", "display:column");
+        lists.textContent = "";
+        startQuizButton.textContent = "";
+        buttons.setAttribute("style", "display:none");
+    }
+    else {
+        // before adjusting ranking, get user to fill in initial.
+        // before localStorage, adjust the array according to ranking, with for loop.
+        // add localStorage function after
+        // localStorage.setItem("", JSON.stringify());
+        
+        questions.setAttribute("style", "text-align:center")
+        questions.textContent = "Please fill in your name below and click submit to view your ranking!";
+        lists.setAttribute("style", "display:column");
+        lists.textContent = "";
+        startQuizButton.textContent = "";
+        buttons.setAttribute("style", "display:none");
+        
+        var userInput = document.createElement("input");
+        userInput.setAttribute("style", "border:1px solid darkgrey; padding: 5px; display:flex; flex-direction:column; margin-bottom:15px");
+        userInput.placeholder = "Type name here...";
+        lists.appendChild(userInput);
 
-    var userSubmit = document.createElement("button");
-    userSubmit.setAttribute("id", "submitHighScore");
-    userSubmit.textContent = "Submit";
-    lists.appendChild(userSubmit);
-    submitHighScore = document.getElementById("submitHighScore");
-    // add high score to the fold
-    
-    // make this below a click eventlistener
-    // viewTop10();
+        var userSubmit = document.createElement("button");
+        userSubmit.textContent = "Submit";
+        lists.appendChild(userSubmit);
+        
+        userSubmit.addEventListener("click", submitScore);
+
+        // add high score to the viewHighScores.
+        // make this below a click eventlistener
+        // viewTop10();
+    }
+}
+
+function submitScore() {
+    console.log("submitScore");
+    var userInput = lists.children[0];
+    var userSubmit = lists.children[1];
+
+
 }
 
 
