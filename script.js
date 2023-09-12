@@ -14,43 +14,26 @@ var rightOrWrong = document.getElementById("rightOrWrong");
 // -5. after answering all questions, result page shows up and show previous high scores (previous ten), then store the name and score in the localStorage if they are top 10, also stop timer.
 // -6. when clicked on top left, you can switch between quiz start and viewHighScores indefinitely (except during quiz)
 // -7. add game over screen (refresh to restart).
-// 8. add right/wrong indicator when clicking on answer buttons.
+// -8. add right/wrong indicator when clicking on answer buttons.
 
-// might use it
 var mainPage = true;
 var timeLeft;
-
-// just in case.
-// var previousQuizScores = localStorage.getItem("previousQuizHighScores");
-// var previousQuizParticipants = localStorage.getItem("previousQuizParticipants");
 
 var previousQuizScores = JSON.parse(localStorage.getItem("previousQuizHighScores"));
 var previousQuizParticipants = JSON.parse(localStorage.getItem("previousQuizParticipants"));
 
-// test
-console.log(previousQuizParticipants, previousQuizScores);
-
 function init () {
-    console.log("init");
-    console.log("mainPage", mainPage);
     timeLeft = 60;
     timer.textContent = timeLeft;
     
     if (previousQuizScores === null || previousQuizParticipants === null) {
         previousQuizParticipants = ["Example1", "Example2", "Example3", "Example4", "Example5", "Example6", "Example7", "Example8", "Example9", "Example10"];
         previousQuizScores = ["50", "45", "40", "35", "30", "25", "20", "15", "10", "5"];
-        // test
-        console.log(previousQuizParticipants[0], previousQuizScores[0]);
-        console.log(previousQuizParticipants.length, previousQuizScores.length);
     }
 }
 
 function viewTop10() {
-    // test
-    console.log("viewTop10");
     viewHighScores.setAttribute("style", "visibility:visible");
-    // changes(1)
-    // new page change (3 lines changed, 10 (possibly) added)
     viewHighScores.textContent = "Return";
     questions.textContent = "High Scores";
     lists.textContent = "";
@@ -59,7 +42,6 @@ function viewTop10() {
     lists.setAttribute("style", "text-align:left");
 
     var topOfList = [""];
-    console.log();
     // for loop here to show top 10 high scores
     for (x=0; x<10; x++) {
         // create elements 
@@ -73,9 +55,6 @@ function viewTop10() {
 }
 
 function defaultPage() {
-    // test
-    console.log("defaultPage");
-    // changes(1) back
     viewHighScores.textContent = "View high scores";
     questions.textContent = "Coding Quiz Challenge";
     lists.textContent = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!";
@@ -89,8 +68,6 @@ function defaultPage() {
 }
 
 function startQuiz() {
-    // test
-    console.log("start quiz");
     questions.textContent = "";
     lists.setAttribute("style", "display:none");
     startQuizButton.setAttribute("style", "display:none");
@@ -107,21 +84,16 @@ function countdown() {
     timeLeft = 60;
     timeInterval = setInterval(function() { 
       timer.innerHTML = timeLeft;
-      //test
-      console.log(timeLeft);
       if(timeLeft <= 0) {    
         clearInterval(timeInterval);
         timer.innerHTML = "60";
         gameOverScreen();
       }
-      // moved this to the bottom so it doesn't stop at 1 seconds.
       timeLeft--;
     }, 1000);
 }
 
 function gameOverScreen() {
-    // test
-    console.log("gameOverScreen")
     buttons.children[4].remove();
     buttons.children[3].remove();
     buttons.children[2].remove();
@@ -134,14 +106,12 @@ function gameOverScreen() {
     wordTime.textContent = "";
 }
 
-
 // -5 secs function
 function minus5() {
     timeLeft = timeLeft - 5;
     var tenSeconds = 8;
     var twoSeconds = setInterval(function() {
         tenSeconds--;
-        console.log(tenSeconds);
         rightOrWrong.setAttribute("style", "border-top:2px solid lightgrey;");
         rightOrWrong.textContent = "Wrong, please try again.";
         if (tenSeconds <= 0) {
@@ -153,11 +123,9 @@ function minus5() {
 }
 
 function correct() {
-    console.log("correct!");
     var tenSeconds = 8;
     var twoSeconds = setInterval(function() {
         tenSeconds--;
-        console.log(tenSeconds);
         rightOrWrong.setAttribute("style", "border-top:2px solid lightgrey;");
         rightOrWrong.textContent = "Correct!";
         if (tenSeconds <= 0) {
@@ -169,9 +137,6 @@ function correct() {
 }
 
 function question1() {
-    // test
-    console.log("Question 1");
-    
     questions.textContent = "Which of the following is the Boolean values?";
 
     var options = [""];
@@ -182,8 +147,6 @@ function question1() {
         options[x].textContent = fourQuestions[x];
         buttons.appendChild(options[x]);
     }
-    // test
-    console.log(options);
 
     options[0].addEventListener("click", minus5);
     options[1].addEventListener("click", question2);
@@ -193,9 +156,6 @@ function question1() {
 
 function question2() {
     correct();
-    // test
-    console.log("Question 2");
-    console.log(buttons.children[0 + 1]);
 
     questions.textContent = "What is hoisting, in Javascript?";
 
@@ -211,7 +171,7 @@ function question2() {
     options[1].removeEventListener("click", question2);
     options[2].removeEventListener("click", minus5);
     options[3].removeEventListener("click", minus5);
-    // these 4 lines above is 
+   
     options[0].addEventListener("click", minus5);
     options[1].addEventListener("click", minus5);
     options[2].addEventListener("click", minus5);
@@ -220,8 +180,6 @@ function question2() {
 
 function question3() {
     correct();
-    // test
-    console.log("Question 3");
 
     questions.textContent = "Inside which HTML element do we place the Javascript?";
 
@@ -245,8 +203,6 @@ function question3() {
 
 function question4() {
     correct();
-    // test
-    console.log("Question 4");
 
     questions.textContent = "Where is the best place to insert a JavaScript in the HTML?";
 
@@ -270,9 +226,6 @@ function question4() {
 
 function question5() {
     correct();
-    // test
-    console.log("Question 5");
-
     questions.textContent = "How do you create an element with Javascript in the HTML?";
 
     var options = [""];
@@ -304,9 +257,7 @@ function quizCompleted() {
     options[1].removeEventListener("click", minus5);
     options[2].removeEventListener("click", minus5);
     options[3].removeEventListener("click", minus5);
-    // only show it after user fill in inputs or restart 
-    // viewHighScores.setAttribute("style", "visibility:visible");
-    console.log(buttons.children);
+
     // remove last 4 child nodes
     buttons.children[4].remove();
     buttons.children[3].remove();
@@ -322,13 +273,6 @@ function quizCompleted() {
 
 
 function userInfo() {
-    // test
-    console.log("userInfo")
-    console.log(timeLeft, previousQuizScores[9]);
-    // previousQuizParticipants = ["Example1", "Example2", "Example3", "Example4", "Example5", "Example6", "Example7", "Example8", "Example9", "Example10"];
-    // previousQuizScores = ["50", "45", "40", "35", "30", "25", "20", "15", "10", "5"];
-    // if user didn't make top 10, present this message to them
-    
     if (timeLeft < previousQuizScores[9]) {
         console.log("tryAgain");
         questions.setAttribute("style", "text-align:center")
@@ -339,11 +283,6 @@ function userInfo() {
         buttons.setAttribute("style", "display:none");
     }
     else {
-        // before adjusting ranking, get user to fill in initial.
-        // before localStorage, adjust the array according to ranking, with for loop.
-        // add localStorage function after
-        // localStorage.setItem("", JSON.stringify());
-
         questions.setAttribute("style", "text-align:center")
         questions.textContent = "Please fill in your name below and click submit to view your ranking!";
         lists.setAttribute("style", "display:column");
@@ -361,16 +300,11 @@ function userInfo() {
         userSubmit.textContent = "Submit";
         lists.appendChild(userSubmit);
 
-        // var userInputValue = userInput.value;
-        // console.log(userInput.value);
         userSubmit.addEventListener("click", submitScore);
     }
 }
 
 function submitScore() {
-    // test
-    console.log("submitScore");
-    
     var userInput = lists.children[0];
     
     while (userInput.value.length < 2) {
@@ -385,8 +319,6 @@ function submitScore() {
             previousQuizScores.splice(x, 0, timeLeft);
             // add new name into previousQuizParticipants.
             previousQuizParticipants.splice(x, 0, userInput.value);
-            // test
-            console.log(previousQuizParticipants, previousQuizScores);
             localStorage.setItem("previousQuizParticipants", JSON.stringify(previousQuizParticipants));
             localStorage.setItem("previousQuizHighScores", JSON.stringify(previousQuizScores));
             viewTop10();
