@@ -184,7 +184,7 @@ function question3() {
     questions.textContent = "Inside which HTML element do we place the Javascript?";
 
     var options = [""];
-    var fourQuestions = ["1. script", "2. js", "3. javascript", "4. script.js"];
+    var fourQuestions = ["1. javascript", "2. js", "3. script", "4. script.js"];
     for (x=0; x<fourQuestions.length; x++) {
         options[x] = buttons.children[x + 1];
         options[x].textContent = fourQuestions[x];
