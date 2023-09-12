@@ -20,7 +20,7 @@ var rightOrWrong = document.getElementById("rightOrWrong");
 var mainPage = true;
 var timeLeft;
 
-// just in case
+// just in case.
 // var previousQuizScores = localStorage.getItem("previousQuizHighScores");
 // var previousQuizParticipants = localStorage.getItem("previousQuizParticipants");
 
@@ -105,7 +105,7 @@ var timeInterval;
 
 function countdown() {
     timeLeft = 60;
-    timeInterval = setInterval(function () { 
+    timeInterval = setInterval(function() { 
       timer.innerHTML = timeLeft;
       //test
       console.log(timeLeft);
@@ -134,9 +134,38 @@ function gameOverScreen() {
     wordTime.textContent = "";
 }
 
+
 // -5 secs function
 function minus5() {
     timeLeft = timeLeft - 5;
+    var tenSeconds = 8;
+    var twoSeconds = setInterval(function() {
+        tenSeconds--;
+        console.log(tenSeconds);
+        rightOrWrong.setAttribute("style", "border-top:2px solid lightgrey;");
+        rightOrWrong.textContent = "Wrong, please try again.";
+        if (tenSeconds <= 0) {
+            clearInterval(twoSeconds);
+            rightOrWrong.setAttribute("style", "border-top:0;");
+            rightOrWrong.textContent = "";
+        }
+    },100)
+}
+
+function correct() {
+    console.log("correct!");
+    var tenSeconds = 8;
+    var twoSeconds = setInterval(function() {
+        tenSeconds--;
+        console.log(tenSeconds);
+        rightOrWrong.setAttribute("style", "border-top:2px solid lightgrey;");
+        rightOrWrong.textContent = "Correct!";
+        if (tenSeconds <= 0) {
+            clearInterval(twoSeconds);
+            rightOrWrong.setAttribute("style", "border-top:0;");
+            rightOrWrong.textContent = "";
+        }
+    },100)
 }
 
 function question1() {
@@ -163,6 +192,7 @@ function question1() {
 }
 
 function question2() {
+    correct();
     // test
     console.log("Question 2");
     console.log(buttons.children[0 + 1]);
@@ -189,6 +219,7 @@ function question2() {
 }
 
 function question3() {
+    correct();
     // test
     console.log("Question 3");
 
@@ -213,6 +244,7 @@ function question3() {
 }
 
 function question4() {
+    correct();
     // test
     console.log("Question 4");
 
@@ -237,6 +269,7 @@ function question4() {
 }
 
 function question5() {
+    correct();
     // test
     console.log("Question 5");
 
@@ -310,7 +343,7 @@ function userInfo() {
         // before localStorage, adjust the array according to ranking, with for loop.
         // add localStorage function after
         // localStorage.setItem("", JSON.stringify());
-        
+
         questions.setAttribute("style", "text-align:center")
         questions.textContent = "Please fill in your name below and click submit to view your ranking!";
         lists.setAttribute("style", "display:column");
@@ -339,12 +372,13 @@ function submitScore() {
     console.log("submitScore");
     
     var userInput = lists.children[0];
-    var userSubmit = lists.children[1];
-    // if user didn't put in name.
-    // if (userInput.value = "") {
-    //     userInput.value = undefined;
-    // }
-    console.log(userInput.value, timeLeft,previousQuizParticipants, previousQuizScores, previousQuizScores.length);
+    
+    while (userInput.value.length < 2) {
+        userInput.value = prompt("Please fill in more than one character.")
+    }
+
+    console.log(userInput.value);
+    console.log(timeLeft, previousQuizParticipants, previousQuizScores, previousQuizScores.length);
 
     for (x=0; x<10; x++) {
         if (timeLeft >= previousQuizScores[x]) {
